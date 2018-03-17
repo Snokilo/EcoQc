@@ -1,4 +1,0 @@
--Faire la page de soumission de candidature, avec les informations que Kronix veut
--Setter un systeme de grade, si on est admins on voit la liste des candidatures soumises, on peus les refuser ou les accepter
--Mettre une page staff, avec la liste des memebres du staff, avec leurs roles
--Rajouter un systeme que l'ont peus repostuler apres x nombres de semaines
