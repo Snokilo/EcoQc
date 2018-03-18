@@ -1,0 +1,6 @@
+<FilesMatch "../admin.php">
+    AuthName "L'espace administrateur est verouillé"
+    AuthType Basic
+    AuthUserFile "C:\wamp64\www\EcoQc\config\.htpasswd"
+    Require valid-user
+</FilesMatch>

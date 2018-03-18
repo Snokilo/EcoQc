@@ -1,11 +1,20 @@
-﻿<?php
-error_reporting(0);
-    if(!empty($_POST)){
-        require_once 'database.php';
-        $req = $pdo->prepare("INSERT INTO membre SET email = ?, discord = ?, eco = ?");
-        $req->execute([$_POST['email'], $_POST['discord'], $_POST['ingame']]);
-        header("Location: applied.php?");
+<?php       
+    $bdd = new PDO('mysql:dbname=id3088575_meridiaphp;host=localhost', 'root', '');
+    
+    if(isset($_GET['accept']) AND !empty($_GET['accept'])){
+        $confirme = $_GET['accept'];
+
+        $req = $bdd->prepare('UPDATE membre SET isAccept = 1 WHERE email = ?');
+        $req->execute(array($confirme));
+    }if(isset($_GET['refuse']) AND !empty($_GET['refuse'])){
+        $refuse = $_GET['refuse'];
+
+        $req = $bdd->prepare('UPDATE membre SET isAccept = 2 WHERE email = ?');
+        $req->execute(array($refuse));
     }
+    
+
+    $membre = $bdd->query('SELECT * FROM membre');
 ?>
 <!DOCTYPE html>
 <html>
@@ -65,31 +74,33 @@ error_reporting(0);
 
         <!-- Header -->
         <div class="w3-container" style="margin-top:80px" id="showcase">
-            <h1 class="w3-jumbo"><b>Postuler</b></h1>
+            <h1 class="w3-jumbo"><b>Administration</b></h1>
             <hr style="width:50px;border:5px solid blue" class="w3-round">
         </div>
 
-        <!-- inscription -->
-        <div class="w3-container" id="contact" style="margin-top:30px">
-            
-            <form action="" method="POST">
-                <div class="w3-section">
-                    <label>Adresse courriel</label>
-                    <input class="w3-input w3-border" type="text" name="email" required>
-                </div>
-                <div class="w3-section">
-                    <label>Pseudo sur le Discord</label>
-                    <input class="w3-input w3-border" type="text" name="discord" placeholder="Ex: Snokilo#2439" required>
-                </div>
-                <div class="w3-section">
-                    <label>Pseudo dans le jeux</label>
-                    <input class="w3-input w3-border" type="text" name="ingame" required>
-                </div>
-                <button type="submit" class="w3-button w3-block w3-padding-large w3-blue w3-margin-bottom">Postuler</button>
-                <?= realpath('admin.php') ?>
-            </form>
+        <!-- Services -->
+        <div class="w3-container" id="services" style="margin-top:30">
+            <p>Voici la liste des joueurs ayant postulé en ordre:</p>
+                
+                        <?php while($m = $membre->fetch()) { ?>
+                            <form action="admin" method="get">
+                                <?php if($m['isAccept'] == null){ ?>
+                                    <?= $m['email']?>
+                                    <br>
+                                    <?= $m['discord']?>
+                                    <br>
+                                    <?= $m['eco']?>
+                                    <br>
+                                    <a href="admin?accept=<?= $m['email'] ?>">Accepter le joueur</a>
+                                    <br>
+                                    <a href="admin?refuse=<?= $m['email'] ?>">Refuser le joueur</a>
+                                    <br><br>
+                                <?php }else{ ?>
+                                
+                            <?php } 
+                        } ?>
+                </form>
         </div>
-
         <!-- End page content -->
     </div>
 
